@@ -41,6 +41,7 @@ public class AllDriverManager {
 //                System.setProperty("webdriver.chrome.driver", System.getenv("CHROMEDRIVER_PATH"));
                 ChromeOptions options = new ChromeOptions();
                 options.addArguments("--user-data-dir=/tmp/chrome-profile-" + System.currentTimeMillis());
+                options.addArguments("--incognito");
                 options.addArguments("--disable-dev-shm-usage");
                 options.addArguments("start-maximized");
                 options.addArguments("--remote-allow-origins=*");
