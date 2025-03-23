@@ -43,15 +43,13 @@ public class AllDriverManager {
                 //System.setProperty("webdriver.chrome.driver", System.getProperty("user.dir")+"/Driver/chromedriver134.exe");
 //                System.setProperty("webdriver.chrome.driver", System.getenv("CHROMEDRIVER_PATH"));
                 ChromeOptions options = new ChromeOptions();
-                options.addArguments("--headless"); // Opsional, untuk GitHub Actions
-                options.addArguments("--no-sandbox"); // Diperlukan di CI/CD
+                // Use a unique temporary directory for user data
+                String tempUserDataDir = System.getProperty("java.io.tmpdir") + "/chrome-user-data-" + System.currentTimeMillis();
+                options.addArguments("--user-data-dir=" + tempUserDataDir);
+                // Optional: Run in headless mode for CI/CD
+                options.addArguments("--headless");
+                options.addArguments("--no-sandbox");
                 options.addArguments("--disable-dev-shm-usage");
-                try {
-                    Path tempDir = Files.createTempDirectory("chrome-profile-" + System.currentTimeMillis());
-                    options.addArguments("--user-data-dir=" + tempDir.toString());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
                 webDriver = new ChromeDriver();
                 break;
             case FIREFOX:
