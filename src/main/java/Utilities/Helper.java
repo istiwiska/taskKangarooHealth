@@ -164,7 +164,7 @@ public class Helper {
 
     public static String removeShould(String input) {
         // Replace the phrases "Should be an " and "Should " with an empty string
-        input = input.replace("Should be an ", "");
+        input = input.replace("Should be ", "");
         input = input.replace("Should ", "");
         return input;
     }
