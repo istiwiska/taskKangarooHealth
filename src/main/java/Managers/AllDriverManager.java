@@ -48,7 +48,8 @@ public class AllDriverManager {
                 options.addArguments("--disable-dev-shm-usage");
                 options.addArguments("--no-sandbox");
                 options.addArguments("--remote-allow-origins=*"); // Hindari error CORS
-                options.addArguments("--user-data-dir=/tmp/chrome-profile-" + System.currentTimeMillis());
+                String tempDir = System.getProperty("java.io.tmpdir") + "/chrome-data-" + System.currentTimeMillis();
+                options.addArguments("--user-data-dir=" + tempDir);
 
                 webDriver = new ChromeDriver();
                 break;
