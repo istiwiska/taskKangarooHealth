@@ -43,13 +43,12 @@ public class AllDriverManager {
                 //System.setProperty("webdriver.chrome.driver", System.getProperty("user.dir")+"/Driver/chromedriver134.exe");
 //                System.setProperty("webdriver.chrome.driver", System.getenv("CHROMEDRIVER_PATH"));
                 ChromeOptions options = new ChromeOptions();
-                // Use a unique temporary directory for user data
-                String tempUserDataDir = System.getProperty("java.io.tmpdir") + "/chrome-user-data-" + System.currentTimeMillis();
-                options.addArguments("--user-data-dir=" + tempUserDataDir);
-                // Optional: Run in headless mode for CI/CD
-                options.addArguments("--headless");
-                options.addArguments("--no-sandbox");
+                options.addArguments("--headless=new"); // Mode headless
+                options.addArguments("--disable-gpu"); // Untuk Linux
                 options.addArguments("--disable-dev-shm-usage");
+                options.addArguments("--no-sandbox");
+
+                WebDriver driver = new ChromeDriver(options);
                 webDriver = new ChromeDriver();
                 break;
             case FIREFOX:
