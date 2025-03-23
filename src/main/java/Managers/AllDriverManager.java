@@ -43,11 +43,15 @@ public class AllDriverManager {
                 //System.setProperty("webdriver.chrome.driver", System.getProperty("user.dir")+"/Driver/chromedriver134.exe");
 //                System.setProperty("webdriver.chrome.driver", System.getenv("CHROMEDRIVER_PATH"));
                 ChromeOptions options = new ChromeOptions();
-                Path tempDir = Files.createTempDirectory("selenium-chrome-profile-");
-                options.addArguments("--user-data-dir=" + tempDir.toString());
                 options.addArguments("--headless"); // Opsional, untuk GitHub Actions
                 options.addArguments("--no-sandbox"); // Diperlukan di CI/CD
                 options.addArguments("--disable-dev-shm-usage");
+                try {
+                    Path tempDir = Files.createTempDirectory("chrome-profile-" + System.currentTimeMillis());
+                    options.addArguments("--user-data-dir=" + tempDir.toString());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 webDriver = new ChromeDriver();
                 break;
             case FIREFOX:

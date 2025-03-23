@@ -26,12 +26,18 @@ jobs:
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
-          java-version: '17'  # Sesuaikan dengan versi Java proyekmu
+          java-version: '17'
 
-      - name: Install Chrome
+      - name: Install Chrome and ChromeDriver
         run: |
           sudo apt-get update
           sudo apt-get install -y google-chrome-stable
+          CHROME_VERSION=$(google-chrome --version | cut -d ' ' -f 3 | cut -d '.' -f 1)
+          wget -N https://chromedriver.storage.googleapis.com/$(curl -sS chromedriver.storage.googleapis.com/LATEST_RELEASE_${CHROME_VERSION})/chromedriver_linux64.zip
+          unzip chromedriver_linux64.zip
+          sudo mv chromedriver /usr/local/bin/chromedriver
+          sudo chmod +x /usr/local/bin/chromedriver
+          chromedriver --version
 
       - name: Cache Maven Packages
         uses: actions/cache@v4
@@ -44,16 +50,17 @@ jobs:
         run: >
           mvn clean test 
           -Dbrowser=${{ inputs.browsername }} 
-          -DenableBrowserOptions=true -Dmaven.test.failure.ignore=true
+          -DenableBrowserOptions=true 
+          -Dmaven.test.failure.ignore=true
 
       - name: Upload Extent Report
         uses: actions/upload-artifact@v4
         with:
           name: extent-report
-          path: reports/ExtentReport.html
+          path: ./reports/ExtentReport.html
 
       - name: Upload Screenshots
         uses: actions/upload-artifact@v4
         with:
           name: selenium-screenshots
-          path: reports/screenshots/
+          path: ./reports/screenshots/
