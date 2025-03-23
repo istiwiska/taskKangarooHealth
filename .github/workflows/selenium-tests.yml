@@ -23,7 +23,9 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Kill any running Chrome instances
-        run: pkill -9 -f "chrome" || true
+        run: |
+          pkill -9 -f "chrome" || true
+          pkill -9 -f "chromedriver" || true
 
       - name: Setup Java
         uses: actions/setup-java@v4
@@ -35,22 +37,35 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y google-chrome-stable jq unzip
-          CHROME_VERSION=$(google-chrome --version | awk '{print $3}' | cut -d '.' -f1)
+          # Get full Chrome version (e.g., 134.0.6998.35)
+          CHROME_VERSION=$(google-chrome --version | awk '{print $3}')
+          echo "Installed Chrome version: $CHROME_VERSION"
+          # Fetch matching ChromeDriver from Chrome for Testing
           DRIVER_URL=$(curl -s "https://googlechromelabs.github.io/chrome-for-testing/last-known-good-versions-with-downloads.json" | \
-                       jq -r --arg ver "$CHROME_VERSION" '.channels.Stable | select(.version | startswith($ver)) | .downloads.chromedriver[] | select(.platform == "linux64") | .url')
+                       jq -r --arg ver "$CHROME_VERSION" '.channels.Stable | select(.version == $ver) | .downloads.chromedriver[] | select(.platform == "linux64") | .url')
           if [ -z "$DRIVER_URL" ]; then
-            echo "Falling back to latest stable ChromeDriver"
+            echo "No exact match for $CHROME_VERSION, falling back to latest stable ChromeDriver"
             DRIVER_URL=$(curl -s "https://googlechromelabs.github.io/chrome-for-testing/last-known-good-versions-with-downloads.json" | \
                          jq -r '.channels.Stable.downloads.chromedriver[] | select(.platform == "linux64") | .url')
           fi
+          echo "Downloading ChromeDriver from: $DRIVER_URL"
           wget -O chromedriver.zip "$DRIVER_URL"
           unzip chromedriver.zip
           sudo mv chromedriver-linux64/chromedriver /usr/local/bin/
           sudo chmod +x /usr/local/bin/chromedriver
+          # Verify installations
           google-chrome --version
           chromedriver --version
+          which chromedriver
 
-      - name: Run Cucumber TestRunner
+      - name: Cache Maven Dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-maven-
+
+      - name: Run Cucumber Tests
         run: |
           mvn clean test \
             -Dbrowser=${{ inputs.browsername }} \
@@ -58,12 +73,14 @@ jobs:
             -Dmaven.test.failure.ignore=true
 
       - name: Upload Extent Report
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: extent-report
           path: ./reports/ExtentReport.html
 
       - name: Upload Screenshots
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: selenium-screenshots
