@@ -22,7 +22,7 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Close any running Chrome instances
+      - name: Kill any running Chrome instances
         run: pkill -f "chrome" || true
 
       - name: Setup Java
@@ -35,10 +35,12 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y google-chrome-stable
-          wget https://chromedriver.storage.googleapis.com/$(curl -s https://chromedriver.storage.googleapis.com/LATEST_RELEASE)/chromedriver_linux64.zip
+          CHROME_VERSION=$(google-chrome --version | awk '{print $3}')
+          echo "Using Chrome version: $CHROME_VERSION"
+          wget "https://chromedriver.storage.googleapis.com/$CHROME_VERSION/chromedriver_linux64.zip"
           unzip chromedriver_linux64.zip
           sudo mv chromedriver /usr/local/bin/
-          chromedriver --version
+          sudo chmod +x /usr/local/bin/chromedriver
 
       - name: Run Cucumber TestRunner
         run: |
