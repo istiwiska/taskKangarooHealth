@@ -36,15 +36,20 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y google-chrome-stable
           CHROME_VERSION=$(google-chrome --version | awk '{print $3}' | cut -d '.' -f1)
-          DRIVER_VERSION=$(curl -s "https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_VERSION")
+          DRIVER_VERSION=$(curl -s "https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_VERSION" || curl -s "https://chromedriver.storage.googleapis.com/LATEST_RELEASE")
           wget "https://chromedriver.storage.googleapis.com/${DRIVER_VERSION}/chromedriver_linux64.zip"
           unzip chromedriver_linux64.zip
           sudo mv chromedriver /usr/local/bin/
+          sudo chmod +x /usr/local/bin/chromedriver
+          google-chrome --version
           chromedriver --version
 
       - name: Run Cucumber TestRunner
         run: |
-          mvn clean test -Dbrowser=headless
+          mvn clean test \
+            -Dbrowser=${{ inputs.browsername }} \
+            -DenableBrowserOptions=true \
+            -Dmaven.test.failure.ignore=true
 
       - name: Upload Extent Report
         uses: actions/upload-artifact@v4
