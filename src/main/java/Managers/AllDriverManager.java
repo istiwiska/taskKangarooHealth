@@ -40,6 +40,7 @@ public class AllDriverManager {
 //                System.setProperty("webdriver.chrome.driver", System.getProperty("user.dir")+"/Driver/chromedriver134.exe");
 //                System.setProperty("webdriver.chrome.driver", System.getenv("CHROMEDRIVER_PATH"));
                 ChromeOptions options = new ChromeOptions();
+                options.addArguments("--headless=new");
                 options.addArguments("--no-sandbox");
                 options.addArguments("--disable-dev-shm-usage");
                 options.addArguments("start-maximized");
