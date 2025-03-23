@@ -1,7 +1,7 @@
 package Utilities;
 
 import com.aventstack.extentreports.*;
-import com.aventstack.extentreports.reporter.ExtentHtmlReporter;
+import com.aventstack.extentreports.reporter.ExtentSparkReporter;
 import org.openqa.selenium.WebDriver;
 
 import java.io.File;
@@ -14,7 +14,7 @@ public class ExtentReportUtil {
 
     public static void startTestReport(String testName) {
         if (extent == null) {
-            ExtentHtmlReporter htmlReporter = new ExtentHtmlReporter("reports/TestReport.html");
+            ExtentSparkReporter htmlReporter = new ExtentSparkReporter("reports/TestReport.html");
             extent = new ExtentReports();
             extent.attachReporter(htmlReporter);
         }
