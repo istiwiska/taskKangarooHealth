@@ -51,9 +51,6 @@ jobs:
       - name: Run Cucumber TestRunner
         run: |
           mvn clean test 
-          -Dbrowser=${{ inputs.browsername }} 
-          -DenableBrowserOptions=true 
-          -Dmaven.test.failure.ignore=true
 
       - name: Upload Extent Report
         uses: actions/upload-artifact@v4
