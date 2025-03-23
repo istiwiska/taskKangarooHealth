@@ -32,9 +32,9 @@ public class ExtentReportUtil {
 
             String screenshotURL = "http://localhost:63342/taskKangarooHealth/" + relativePath;
 
-            System.out.println("Extent Report Screenshot URL: " + screenshotURL);
+//            System.out.println("Extent Report Screenshot URL: " + screenshotURL);
 
-            String imgTag = "<img src='" + screenshotURL + "' style='width: 800px; height: 500px;'>";
+            String imgTag = "<img src='" + screenshotURL + "' style='width: 100px; height: 100px;'>";
 
             test.info(message + "<br>" + imgTag);
         } else {
@@ -45,12 +45,42 @@ public class ExtentReportUtil {
 
     public static void logPassWithScreenshot(WebDriver driver, String message) throws IOException {
         String screenshotPath = ScreenshotUtil.takeScreenshot(driver, "Pass");
-        test.pass(message, MediaEntityBuilder.createScreenCaptureFromPath(screenshotPath).build());
+        if (screenshotPath != null) {
+            File screenshotFile = new File(screenshotPath);
+            String relativePath = Paths.get("reports", "screenshots", screenshotFile.getName())
+                    .toString()
+                    .replace("\\", "/");
+
+            String screenshotURL = "http://localhost:63342/taskKangarooHealth/" + relativePath;
+
+//            System.out.println("Extent Report Screenshot URL: " + screenshotURL);
+
+            String imgTag = "<img src='" + screenshotURL + "' style='width: 100px; height: 100px;'>";
+
+            test.pass(message + "<br>" + imgTag);
+        } else {
+            test.pass(message + " (Screenshot failed)");
+        }
     }
 
     public static void logFailWithScreenshot(WebDriver driver, String message) throws IOException {
         String screenshotPath = ScreenshotUtil.takeScreenshot(driver, "Fail");
-        test.fail(message, MediaEntityBuilder.createScreenCaptureFromPath(screenshotPath).build());
+        if (screenshotPath != null) {
+            File screenshotFile = new File(screenshotPath);
+            String relativePath = Paths.get("reports", "screenshots", screenshotFile.getName())
+                    .toString()
+                    .replace("\\", "/");
+
+            String screenshotURL = "http://localhost:63342/taskKangarooHealth/" + relativePath;
+
+//            System.out.println("Extent Report Screenshot URL: " + screenshotURL);
+
+            String imgTag = "<img src='" + screenshotURL + "' style='width: 100px; height: 100px;'>";
+
+            test.fail(message + "<br>" + imgTag);
+        } else {
+            test.fail(message + " (Screenshot failed)");
+        }
     }
 
     public static void flushReport() {
@@ -73,5 +103,9 @@ public class ExtentReportUtil {
         } else {
             System.out.println("Folder screenshots can not found");
         }
+    }
+
+    public static void logFail(String message) {
+        test.fail(message);
     }
 }

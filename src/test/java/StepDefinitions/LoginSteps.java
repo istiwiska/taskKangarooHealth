@@ -1,5 +1,6 @@
 package StepDefinitions;
 
+import DataProviders.ConfigFileReader;
 import Managers.AllDriverManager;
 import PageObjects.HomePage;
 import PageObjects.LoginPage;
@@ -36,8 +37,6 @@ public class LoginSteps {
 
     @Given("Login page is displayed")
     public void loginPageIsDisplayed() throws IOException {
-        clearScreenshotsFolder();
-        ExtentReportUtil.startTestReport("Login Test");
         Assert.assertTrue(loginPage.emailLoginPageIsDisplayed());
 
         String actualLoginHeaderTitle = loginPage.getLoginHeaderTitle();
@@ -46,11 +45,11 @@ public class LoginSteps {
         ExtentReportUtil.logInfoWithScreenshot(driver, "Login page is displayed");
     }
 
-    @And("I enter email {string}")
-    public void iEnterEmai(String email) throws IOException {
-        loginPage.fillEmailData(email);
-        Logger.logStep("I enter email "+email);
-        ExtentReportUtil.logInfoWithScreenshot(driver, "I enter email "+email);
+    @And("I enter username {string}")
+    public void iEnterEmai(String username) throws IOException {
+        loginPage.fillEmailData(username);
+        Logger.logStep("I enter username "+username);
+        ExtentReportUtil.logInfoWithScreenshot(driver, "I enter email "+username);
     }
 
     @And("I enter password {string}")
@@ -60,11 +59,32 @@ public class LoginSteps {
         ExtentReportUtil.logInfoWithScreenshot(driver, "I enter password "+password);
     }
 
-    @And("Click sign in button")
+    @And("I click sign in button")
     public void clickSignInButton() throws IOException {
         loginPage.clickSignInButton();
         Logger.logStep("I click sign in button");
         ExtentReportUtil.logInfoWithScreenshot(driver, "I click sign in button");
     }
 
+    @Then("I expect error message is showing")
+    public void iExpectErrorMessageIsShowing() throws IOException {
+        String errMessage = loginPage.getErrMessage();
+        try {
+            Assert.assertEquals(ConfigFileReader.getProperty("login.error.usernamenotexisting"), errMessage);
+            Logger.logStep("I expect error message is showing");
+            ExtentReportUtil.logPassWithScreenshot(driver, "I expect error message is showing");
+
+        } catch (AssertionError e) {
+            Logger.logStep("Assertion failed: " + e.getMessage());
+            ExtentReportUtil.logFailWithScreenshot(driver, "Expected error message not shown");
+            throw e;
+        }
+    }
+
+    @And("I enter username and password")
+    public void iEnterUsernameAndPassword() throws IOException {
+        loginPage.fillEmailPasswordData();
+        Logger.logStep("I enter username and password");
+        ExtentReportUtil.logInfoWithScreenshot(driver, "I enter username and password");
+    }
 }

@@ -33,6 +33,11 @@ public class LoginPage {
         return webDriver.findElement(By.id(ConfigFileReader.getProperty("login.button.id")));
     }
 
+    public WebElement getErrorMessage() {
+        return webDriver.findElement(By.xpath(ConfigFileReader.getProperty("login.error.xpath")));
+    }
+
+
     public boolean emailLoginPageIsDisplayed() {
         return getLoginTitle().isDisplayed();
     }
@@ -53,7 +58,18 @@ public class LoginPage {
         password.sendKeys(passwordText);
     }
 
+    public void fillEmailPasswordData() {
+        fillEmailData("standard_user");
+        fillPasswordData("secret_sauce");
+    }
+
     public void clickSignInButton() {
         getLoginButton().click();
+    }
+
+    public String getErrMessage(){
+        WebElement errorMessage = getErrorMessage();
+        errorMessage.isDisplayed();
+        return errorMessage.getText();
     }
 }

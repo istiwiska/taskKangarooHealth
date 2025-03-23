@@ -12,9 +12,10 @@ import org.testng.annotations.Test;
 
 import java.util.List;
 
+import static Utilities.ExtentReportUtil.clearScreenshotsFolder;
+
 @CucumberOptions(
-        features = "src/test/reso" +
-                "urces/features",
+        features = "src/test/resources/features",
         glue = "StepDefinitions",
         plugin = {
                 "pretty",
@@ -35,6 +36,7 @@ public class TestRunner extends AbstractTestNGCucumberTests {
     @BeforeSuite
     public void beforeSuite() {
         System.out.println("================ BEFORE SUITE ================");
+        clearScreenshotsFolder();
     }
 
     @AfterSuite

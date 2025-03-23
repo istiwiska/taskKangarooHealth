@@ -1,9 +1,6 @@
 package Utilities;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
@@ -15,6 +12,7 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.NoSuchElementException;
 
 public class Helper {
 
@@ -35,16 +33,6 @@ public class Helper {
         }
     }
 
-    public static void clickHyperlink(WebDriver webDriver,String hyperlinkText) throws InterruptedException {
-//        while (!checkDesiredLink(hyperlinkText)) {
-//            // Click on the "Next" button or element to navigate to the next page
-//            WebElement nextButton = webDriver.findElement(By.xpath("//a[@class='next']"));
-//            nextButton.click();
-//
-//            webDriver.wait(10);
-//        }
-        webDriver.findElement(By.linkText(hyperlinkText)).click();
-    }
 
     public static void clickButton(WebElement webElement) {
         try {
@@ -152,24 +140,6 @@ public class Helper {
         element.click();
     }
 
-    public static Boolean AssertTextMessage(WebDriver driver,String className,String text){
-        System.out.println("//"+className+"[@class='success' and contains(text(), '"+text+"')]");
-        WebElement successMessage = driver.findElement(By.xpath("//"+className+"[@class='success' and contains(text(), '"+text+"')]"));
-
-        // Get the text of the element
-        String actualText = successMessage.getText();
-
-        // Expected text
-        String expectedText = text;
-
-        // Assert the text
-        if (actualText.equals(expectedText)) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
 
     public static void clickRadioButton(WebDriver driver, String idElement){
         WebElement radioButton = driver.findElement(By.id(idElement));
@@ -187,11 +157,38 @@ public class Helper {
         System.out.println("Checkbox 'AH1 -PM10A' clicked successfully.");
     }
 
+    public static void selectFilter(WebDriver driver, String filterOption) {
+        WebElement optionElement = driver.findElement(By.xpath("//option[@value='" + filterOption + "']"));
+        optionElement.click();
+    }
+
     public static String removeShould(String input) {
         // Replace the phrases "Should be an " and "Should " with an empty string
         input = input.replace("Should be an ", "");
         input = input.replace("Should ", "");
         return input;
+    }
+
+    public static void clickProduct(WebDriver driver, String productName) {
+        try {
+            WebDriverWait wait = new WebDriverWait(driver, 10);
+            String xpath = "//div[contains(@class, 'inventory_item_name') and normalize-space(text())='" + productName + "']/parent::a";
+            WebElement productLink = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(xpath)));
+
+            // Scroll ke elemen
+            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});", productLink);
+
+            // Tunggu sampai elemen bisa diklik
+            wait.until(ExpectedConditions.elementToBeClickable(productLink));
+            productLink.click();
+            System.out.println("Product '" + productName + "' clicked successfully.");
+        } catch (NoSuchElementException e) {
+            System.err.println("Error: Product '" + productName + "' not found.");
+            throw new RuntimeException("Product not found: " + productName);
+        } catch (TimeoutException e) {
+            System.err.println("Error: Product '" + productName + "' is not clickable.");
+            throw new RuntimeException("Product is not clickable: " + productName);
+        }
     }
 
 

@@ -1,6 +1,7 @@
 package StepDefinitions;
 
 import Managers.FileReaderManager;
+import Utilities.ExtentReportUtil;
 import Utilities.TestCase;
 import Utilities.TestContext;
 import io.cucumber.core.backend.TestCaseState;
@@ -10,9 +11,12 @@ import io.cucumber.java.Scenario;
 import org.openqa.selenium.WebDriver;
 import io.cucumber.plugin.event.Result;
 
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
+
+import static Utilities.ExtentReportUtil.clearScreenshotsFolder;
 
 public class Hooks {
 
@@ -28,11 +32,13 @@ public class Hooks {
     }
 
     @Before
-    public void setUp() {
+    public void setUp(Scenario scenario) {
         webDriver = testContext.getDriverManager().getDriver();
         webDriver.get(FileReaderManager.getInstance().getConfigFileReader().getUrl());
         steps.clear();
+        ExtentReportUtil.startTestReport(scenario.getName());
     }
+
 
     @After
     public void captureScenarioStatus(Scenario scenario) {
@@ -97,6 +103,15 @@ public class Hooks {
         return modul;
     }
 
+    @After
+    public void tearDown(Scenario scenario) {
+        if (scenario.isFailed()) {
+            String errorMessage = "Test failed: "+getFailureMessage(scenario);
+            System.out.println(errorMessage); // Debugging di console
+            ExtentReportUtil.logFail(errorMessage);
+            ExtentReportUtil.flushReport();
+        }
+    }
 
 
 }
