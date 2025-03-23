@@ -28,10 +28,6 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Configure DNS
-        run: |
-          echo "nameserver 8.8.8.8" | sudo tee /etc/resolv.conf
-
       - name: Install Chrome and ChromeDriver
         run: |
           sudo apt-get update
