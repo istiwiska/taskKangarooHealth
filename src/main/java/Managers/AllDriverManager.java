@@ -37,9 +37,10 @@ public class AllDriverManager {
         switch (driverType) {
             case CHROME:
                 WebDriverManager.chromedriver().setup();
-                System.setProperty("webdriver.chrome.driver", System.getProperty("user.dir")+"/Driver/chromedriver134.exe");
+                //System.setProperty("webdriver.chrome.driver", System.getProperty("user.dir")+"/Driver/chromedriver134.exe");
 //                System.setProperty("webdriver.chrome.driver", System.getenv("CHROMEDRIVER_PATH"));
                 ChromeOptions options = new ChromeOptions();
+                options.addArguments("--profile-directory=other_profile");
                 options.addArguments("--headless");
                 options.addArguments("--disable-gpu");
                 options.addArguments("start-maximized");
