@@ -1,6 +1,12 @@
 name: CI/CD Task Kangaroo Health
 
 on:
+  workflow_dispatch:
+    inputs:
+      browsername:
+        type: string
+        description: 'Browser name'
+        default: 'chrome'
   push:
     branches:
       - main
@@ -22,12 +28,6 @@ jobs:
           distribution: 'temurin'
           java-version: '17'  # Sesuaikan dengan versi Java proyekmu
 
-      - name: Remove Chrome
-        run: sudo apt purge google-chrome-stable
-      - name: Remove default Chromium
-        run: sudo apt purge chromium-browser
-      - name: Install a new Chromium
-        run: sudo apt install -y chromium-browser
       - name: Cache Maven Packages
         uses: actions/cache@v4
         with:
@@ -35,8 +35,11 @@ jobs:
           key: maven-${{ runner.os }}-${{ hashFiles('**/pom.xml') }}
           restore-keys: maven-${{ runner.os }}
 
-      - name: Run Tests with Maven
-        run: mvn test
+      - name: Run Cucumber TestRunner
+        run: >
+          mvn clean test 
+          -Dbrowser=${{ inputs.browsername }} 
+          -DenableBrowserOptions=true -Dmaven.test.failure.ignore=true
 
       - name: Upload Extent Report
         uses: actions/upload-artifact@v4
