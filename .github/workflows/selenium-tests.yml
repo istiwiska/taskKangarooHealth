@@ -26,6 +26,7 @@ jobs:
         run: |
           pkill -9 -f "chrome" || true
           pkill -9 -f "chromedriver" || true
+          rm -rf /tmp/chrome-data-* || true
 
       - name: Setup Java
         uses: actions/setup-java@v4
