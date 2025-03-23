@@ -1,5 +1,6 @@
 package StepDefinitions;
 
+import Managers.AllDriverManager;
 import Managers.FileReaderManager;
 import Utilities.ExtentReportUtil;
 import Utilities.TestCase;
@@ -22,6 +23,7 @@ public class Hooks {
 
     TestContext testContext;
     WebDriver webDriver;
+    AllDriverManager driverManager;
     static List<TestCase> testCases = new ArrayList<>();
 
     public static List<String> steps = new ArrayList<>();
@@ -37,6 +39,7 @@ public class Hooks {
         webDriver.get(FileReaderManager.getInstance().getConfigFileReader().getUrl());
         steps.clear();
         ExtentReportUtil.startTestReport(scenario.getName());
+        driverManager = new AllDriverManager();
     }
 
 
@@ -110,6 +113,9 @@ public class Hooks {
             System.out.println(errorMessage); // Debugging di console
             ExtentReportUtil.logFail(errorMessage);
             ExtentReportUtil.flushReport();
+        }
+        if (driverManager != null) {
+            driverManager.closeDriver();
         }
     }
 
