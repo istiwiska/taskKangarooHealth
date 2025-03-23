@@ -43,6 +43,7 @@ public class AllDriverManager {
                 options.addArguments("--no-sandbox");
                 options.addArguments("--disable-dev-shm-usage");
                 options.addArguments("start-maximized");
+                options.addArguments("--remote-allow-origins=*");
                 webDriver = new ChromeDriver();
                 break;
             case FIREFOX:
