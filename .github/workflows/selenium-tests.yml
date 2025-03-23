@@ -39,7 +39,7 @@ jobs:
 
       - name: Run Cucumber TestRunner
         run: |
-          mvn clean test 
+          mvn test 
 
       - name: Upload Extent Report
         uses: actions/upload-artifact@v4
