@@ -23,7 +23,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Kill any running Chrome instances
-        run: pkill -f "chrome" || true
+        run: pkill -9 -f "chrome" || true
 
       - name: Setup Java
         uses: actions/setup-java@v4
