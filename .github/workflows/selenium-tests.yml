@@ -22,6 +22,9 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
+      - name: Close any running Chrome instances
+        run: pkill -f "chrome" || true
+
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
@@ -39,7 +42,7 @@ jobs:
 
       - name: Run Cucumber TestRunner
         run: |
-          mvn test 
+          mvn clean test -Dbrowser=headless
 
       - name: Upload Extent Report
         uses: actions/upload-artifact@v4
