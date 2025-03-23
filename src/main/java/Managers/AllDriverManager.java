@@ -15,8 +15,11 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.safari.SafariDriver;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -33,19 +36,18 @@ public class AllDriverManager {
         environmentType = FileReaderManager.getInstance().getConfigFileReader().getEnvironment();
     }
 
-    private WebDriver createLocalDriver() {
+    private WebDriver createLocalDriver() throws IOException {
         switch (driverType) {
             case CHROME:
                 WebDriverManager.chromedriver().setup();
                 //System.setProperty("webdriver.chrome.driver", System.getProperty("user.dir")+"/Driver/chromedriver134.exe");
 //                System.setProperty("webdriver.chrome.driver", System.getenv("CHROMEDRIVER_PATH"));
                 ChromeOptions options = new ChromeOptions();
-                options.addArguments("--profile-directory=other_profile");
-                options.addArguments("--headless");
-                options.addArguments("--disable-gpu");
-                options.addArguments("start-maximized");
-                options.addArguments("--no-sandbox");
-                options.addArguments("--remote-allow-origins=*");
+                Path tempDir = Files.createTempDirectory("selenium-chrome-profile-");
+                options.addArguments("--user-data-dir=" + tempDir.toString());
+                options.addArguments("--headless"); // Opsional, untuk GitHub Actions
+                options.addArguments("--no-sandbox"); // Diperlukan di CI/CD
+                options.addArguments("--disable-dev-shm-usage");
                 webDriver = new ChromeDriver();
                 break;
             case FIREFOX:
@@ -87,10 +89,14 @@ public class AllDriverManager {
     }
 
 
-    private WebDriver createDriver() {
+    private WebDriver createDriver() throws IOException {
         switch (environmentType) {
             case LOCAL:
-                webDriver = createLocalDriver();
+                try {
+                    webDriver = createLocalDriver();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
                 break;
             case REMOTE:
                 webDriver = createRemoteDriver();
@@ -99,7 +105,7 @@ public class AllDriverManager {
         return webDriver;
     }
 
-    public WebDriver getDriver() {
+    public WebDriver getDriver() throws IOException {
         if (webDriver == null) webDriver = createDriver();
         return webDriver;
     }

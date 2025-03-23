@@ -32,7 +32,7 @@ public class Hooks {
     }
 
     @Before
-    public void setUp(Scenario scenario) {
+    public void setUp(Scenario scenario) throws IOException {
         webDriver = testContext.getDriverManager().getDriver();
         webDriver.get(FileReaderManager.getInstance().getConfigFileReader().getUrl());
         steps.clear();

@@ -21,7 +21,7 @@ public class HomeSteps {
     HomePage homePage;
     WebDriver driver;
 
-    public HomeSteps(TestContext context) {
+    public HomeSteps(TestContext context) throws IOException {
         testContext = context;
         homePage = testContext.getPageObjectManager().getHomePage();
         driver = testContext.getDriverManager().getDriver();

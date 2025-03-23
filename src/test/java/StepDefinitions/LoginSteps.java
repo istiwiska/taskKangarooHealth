@@ -28,7 +28,7 @@ public class LoginSteps {
     HomePage homePage;
     WebDriver driver;
 
-    public LoginSteps(TestContext context) {
+    public LoginSteps(TestContext context) throws IOException {
         testContext = context;
         loginPage = testContext.getPageObjectManager().getLoginPage();
         homePage = testContext.getPageObjectManager().getHomePage();

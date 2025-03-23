@@ -28,6 +28,11 @@ jobs:
           distribution: 'temurin'
           java-version: '17'  # Sesuaikan dengan versi Java proyekmu
 
+      - name: Install Chrome
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y google-chrome-stable
+
       - name: Cache Maven Packages
         uses: actions/cache@v4
         with:
