@@ -33,13 +33,13 @@ jobs:
         run: mvn test
 
       - name: Upload Extent Report
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: extent-report
-          path: D:\Project\taskKangarooHealth\reports\ExtentReport.html
+          path: reports/ExtentReport.html
 
       - name: Upload Screenshots
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: selenium-screenshots
-          path: D:\Project\taskKangarooHealth\reports\screenshots
+          path: reports/screenshots/
