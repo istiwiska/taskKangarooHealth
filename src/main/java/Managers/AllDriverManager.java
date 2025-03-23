@@ -48,7 +48,6 @@ public class AllDriverManager {
                 options.addArguments("--disable-dev-shm-usage");
                 options.addArguments("--no-sandbox");
 
-                WebDriver driver = new ChromeDriver(options);
                 webDriver = new ChromeDriver();
                 break;
             case FIREFOX:
