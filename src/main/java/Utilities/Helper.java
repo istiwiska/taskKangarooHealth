@@ -169,19 +169,26 @@ public class Helper {
         return input;
     }
 
-    public static void clickProduct(WebDriver driver, String productName) {
+    public static void clickProduct(WebDriver driver, String productName, String condition) {
         try {
             WebDriverWait wait = new WebDriverWait(driver, 10);
             String xpath = "//div[contains(@class, 'inventory_item_name') and normalize-space(text())='" + productName + "']/parent::a";
             WebElement productLink = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(xpath)));
 
-            // Scroll ke elemen
             ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});", productLink);
 
-            // Tunggu sampai elemen bisa diklik
-            wait.until(ExpectedConditions.elementToBeClickable(productLink));
-            productLink.click();
-            System.out.println("Product '" + productName + "' clicked successfully.");
+            if (condition.equals("hyperlink")) {
+                wait.until(ExpectedConditions.elementToBeClickable(productLink)).click();
+                System.out.println("Product '" + productName + "' clicked successfully.");
+            } else if (condition.equals("cart")) {
+                wait.until(ExpectedConditions.elementToBeClickable(productLink)).click();
+                System.out.println("Product '" + productName + "' clicked successfully.");
+
+                String addToCartXpath = "//button[contains(@data-test, 'add-to-cart')]";
+                WebElement addToCartButton = wait.until(ExpectedConditions.elementToBeClickable(By.xpath(addToCartXpath)));
+                addToCartButton.click();
+                System.out.println("Product '" + productName + "' added to cart successfully.");
+            }
         } catch (NoSuchElementException e) {
             System.err.println("Error: Product '" + productName + "' not found.");
             throw new RuntimeException("Product not found: " + productName);

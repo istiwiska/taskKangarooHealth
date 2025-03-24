@@ -44,7 +44,7 @@ public class TestRunner extends AbstractTestNGCucumberTests {
         System.out.println("Tear Down");
         List<TestCase> testcases = Hooks.getScenarioDetailsList();
         List<String> recipientEmails = List.of("istiw28@gmail.com");
-        SendEmail.sendEmail("t70840400@gmail.com","kdzw nbqj fzbm gmlt",recipientEmails,"Test E2E Kim Loong Web Test Server",testcases);
+        SendEmail.sendEmail("t70840400@gmail.com","kdzw nbqj fzbm gmlt",recipientEmails,"Test E2E Swag Labs",testcases);
         System.out.println("================ AFTER SUITE ================");
     }
 }

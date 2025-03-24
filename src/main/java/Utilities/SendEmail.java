@@ -46,7 +46,7 @@ public class SendEmail {
 
             StringBuilder htmlBody = new StringBuilder();
             htmlBody.append("<html><body>");
-            htmlBody.append("Dear Team,<br>I hope this message finds you well<br>Attached is the Test Cases Report for Kim Loong Web Test Server. This report provides an overview of the test cases executed, including their status, test steps, and the overall success rate");
+            htmlBody.append("Dear Team,<br>I hope this message finds you well<br>Attached is the Test Cases Report for Sauce Demo Web. This report provides an overview of the test cases executed, including their status, test steps, and the overall success rate");
             htmlBody.append("<table border=\"1\" style='border-collapse: collapse;'>");
             htmlBody.append("<tr><th style='width: 200px; border: 1px solid black;'>No</th><th style='width: 200px; border: 1px solid black;'>Test Scenario</th><th style='width: 200px; border: 1px solid black;'>Test Case Name & Test Step</th><th style='width: 100px; border: 1px solid black;'>Expected Result</th><th style='width: 100px; border: 1px solid black;'>Status</th></tr>");
 

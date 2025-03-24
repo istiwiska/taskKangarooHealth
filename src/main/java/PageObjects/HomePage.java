@@ -44,7 +44,7 @@ public class HomePage {
 
     public void clickHyperlinkProduct(){
         try {
-            Helper.clickProduct(webDriver, ConfigFileReader.getProperty("home.product.name"));
+            Helper.clickProduct(webDriver, ConfigFileReader.getProperty("home.product.name"),"hyperlink");
         } catch (RuntimeException e) {
             System.err.println("Failed to click product hyperlink: " + e.getMessage());
         }
@@ -52,7 +52,7 @@ public class HomePage {
 
     public void clickHyperlinkProductNonExisting(){
         try {
-            Helper.clickProduct(webDriver, ConfigFileReader.getProperty("home.product.nonexistingname"));
+            Helper.clickProduct(webDriver, ConfigFileReader.getProperty("home.product.nonexistingname"),"hyperlink");
         } catch (RuntimeException e) {
             System.err.println("Failed to click product hyperlink: " + e.getMessage());
         }

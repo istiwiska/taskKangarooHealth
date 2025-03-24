@@ -79,7 +79,7 @@ public class HomeSteps {
     public void iSearchForANonExistingProduct() throws IOException {
         try {
             homePage.clickHyperlinkProductNonExisting();
-            Logger.logStep("I search for a product");
+            Logger.logStep("I search for a non existing product");
             ExtentReportUtil.logPassWithScreenshot(driver, "I search for a non existing product");
         } catch (RuntimeException | IOException e) {
             Logger.logStep("Error: " + e.getMessage());
@@ -93,4 +93,5 @@ public class HomeSteps {
         Logger.logStep("I should cant find the product I was looking for");
         ExtentReportUtil.logPassWithScreenshot(driver, "I should cant find the product I was looking for");
     }
+
 }

@@ -10,6 +10,7 @@ public class PageObjectManager {
     private final WebDriver webDriver;
     private LoginPage loginPage;
     private HomePage homePage;
+    private CartPage cartPage;
 
 
     public PageObjectManager(WebDriver webDriver) {
@@ -35,6 +36,16 @@ public class PageObjectManager {
             webDriver.manage().window().maximize();
         }
         return homePage;
+
+    }
+
+    public CartPage getCartPage() {
+
+        if (cartPage == null) {
+            cartPage = new CartPage(webDriver);
+            webDriver.manage().window().maximize();
+        }
+        return cartPage;
 
     }
 
