@@ -57,7 +57,7 @@ Reports & Logs
 
     Cucumber Report: target/cucumber-reports/index.html
 
-    Extent Report: target/extent-report.html
+    Extent Report: reports/TestReport.html
 
 - Email notifications include a summary of test execution.
 
